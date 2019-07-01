@@ -1,2 +1,5 @@
-<p>logged in</p>
-
+<% if(!locals.login) { %>
+  <p>you are not logged in</p>
+<% } else { %>
+  <p>you are logged in</p>
+<% } %>
