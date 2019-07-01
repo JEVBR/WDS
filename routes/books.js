@@ -4,6 +4,18 @@ const Book = require('../models/book')
 const Author = require('../models/author')
 const imageMimeTypes = ['image/jpeg', 'image/png', 'images/gif']
 
+
+// const loggedin = fn => (req, res, next) => {
+//   // if (req.isAuthenticated()) {
+//      console.log('here')
+//      //next()
+//   // } else {
+//     // const params = { errorMessage: 'Please Login'}
+//     // res.render('/' , params )
+//   // }
+// }
+
+
 // All Books Route
 router.get('/', async (req, res) => {
   let query = Book.find()
@@ -31,6 +43,11 @@ router.get('/', async (req, res) => {
 router.get('/new', async (req, res) => {
   renderNewPage(res, new Book())
 })
+
+// // New Book Route
+// router.get('/new', loggedin( async (req, res) => {
+//   renderNewPage(res, new Book())
+// }))
 
 // Create Book Route
 router.post('/', async (req, res) => {
@@ -152,5 +169,7 @@ function saveCover(book, coverEncoded) {
     book.coverImageType = cover.type
   }
 }
+
+
 
 module.exports = router

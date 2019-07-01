@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Author = require('../models/author')
 const Book = require('../models/book')
+const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
 
 // All Authors Route
 router.get('/', async (req, res) => {
@@ -21,12 +22,12 @@ router.get('/', async (req, res) => {
 })
 
 // New Author Route
-router.get('/new', (req, res) => {
+router.get('/new', ensureAuthenticated, (req, res) => {
   res.render('authors/new', { author: new Author() })
 })
 
 // Create Author Route
-router.post('/', async (req, res) => {
+router.post('/', ensureAuthenticated, async (req, res) => {
   const author = new Author({
     name: req.body.name
   })

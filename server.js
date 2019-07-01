@@ -7,10 +7,33 @@ const app = express()
 const expressLayouts = require('express-ejs-layouts')
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
-
+const passport = require('passport')
 const indexRouter = require('./routes/index')
 const authorRouter = require('./routes/authors')
 const bookRouter = require('./routes/books')
+const userRouter = require('./routes/users')
+const session = require('express-session')
+const flash = require('connect-flash');
+// Passport Config
+require('./config/passport')(passport);
+
+app.use(session({
+  secret: "testnode",
+  resave:true,
+  saveUninitialized: true
+}))
+
+app.use(passport.initialize())
+app.use(passport.session())
+app.use(flash());
+
+// Global variables
+app.use(function(req, res, next) {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
+  next();
+});
 
 app.set('view engine', 'ejs')
 app.set('views', __dirname + '/views')
@@ -29,5 +52,7 @@ db.once('open', () => console.log('Connected to Mongoose'))
 app.use('/', indexRouter)
 app.use('/authors', authorRouter)
 app.use('/books', bookRouter)
+app.use('/users', userRouter)
+
 
 app.listen(process.env.PORT || 3000)
